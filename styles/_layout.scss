@@ -1,0 +1,19 @@
+.container {
+	max-width: 120rem;
+	min-height: 100vh;
+	background-color: var(--color-grey-light-2);
+	height: -webkit-fill-available;
+	overflow: auto;
+	margin: 3em auto;
+	@media only screen and (max-width: $bp-largest) {
+		margin: 0;
+	}
+}
+
+.layout {
+	max-width: 100vw;
+	min-height: 100vh;
+	background-color: var(--color-grey-light-2);
+	height: -webkit-fill-available;
+	overflow: auto;
+}
