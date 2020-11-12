@@ -1,30 +1,19 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import classnames from 'classnames';
+import _ from 'lodash';
+import Router from 'next/router';
+import { validateEmail } from 'helpers/utils';
+import { signIn } from 'actions';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,24 +29,95 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
+    '& input': {
+      fontSize: '2rem'
+    },
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    height: '5vh',
+    fontSize: '2rem',
+    pointerEvents: 'unset',
+
+    '&.disabled': {
+      backgroundColor: 'gray',
+      pointerEvents: 'none'
+    }
   },
+  errorText: {
+    fontSize: '1.5rem',
+    color: 'red'
+  }
+
 }));
 
-export default function SignIn() {
+
+
+const SignIn = () => {
+
   const classes = useStyles();
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [isBtnActive, setBtnState] = useState(false);
+  const [onSubmitError, setError] = useState(false);
+
+
+
+  const inputHandler = (e) => {
+    setError(false);
+    if (e.target.name === 'email') {
+      setEmail(e.target.value);
+    } else {
+      setPassword(e.target.value);
+    }
+  };
+
+
+  // after set Email or password, check submit button is now on active
+  useEffect(() => {
+    const isValidEmail = validateEmail(email);
+    const isPasswordEmpty = _.isEmpty(password);
+
+    if (isValidEmail && !isPasswordEmpty) {
+      setBtnState(true);
+    } else {
+      setBtnState(false);
+    }
+
+  });
+
+  const signInHandler = async (e) => {
+    e.preventDefault();
+
+    const signInData = {
+      email, password
+    };
+    let signInResult = '';
+    try {
+      signInResult = await signIn(signInData);
+    } catch (e) {
+      console.log('signin error', e);
+    }
+
+    if (signInResult.code == 200) {
+      Router.push('/album');
+    } else {
+      console.log(signInResult.message);
+      setError(true);
+    }
+  };
+
 
   return (
     <div className="layout">
-      <Container className="layout-login" component="main" maxWidth="xs">
+      <Container className="container-login" component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h3">
             Sign in
           </Typography>
           <form className={classes.form} noValidate>
@@ -71,6 +131,9 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={inputHandler}
+              error={onSubmitError}
+
             />
             <TextField
               variant="outlined"
@@ -82,23 +145,26 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={inputHandler}
+              error={onSubmitError}
             />
-
+            {onSubmitError && <h3 className={classes.errorText}>Please Check your information</h3>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              className={classnames(classes.submit, { 'disabled': !isBtnActive })}
+              onClick={signInHandler}
             >
               Sign In
             </Button>
           </form>
         </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
+
       </Container>
     </div>
   );
-}
+};
+
+export default SignIn;
