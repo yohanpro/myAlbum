@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import _ from 'lodash';
 import Router from 'next/router';
 import { validateEmail } from 'helpers/utils';
-import { signIn } from 'actions';
+import { signIn, autologin } from 'actions';
 
 
 
@@ -63,6 +63,20 @@ const SignIn = () => {
   const [onSubmitError, setError] = useState(false);
 
 
+  //autologin process
+  useEffect(() => {
+    const myToken = localStorage.getItem('myToken') || '';
+    if (!myToken) return;
+
+    autologin('123')
+      .then(result => {
+        if (result.code === 200) {
+          Router.push('/album');
+        }
+      });
+
+
+  }, []);
 
   const inputHandler = (e) => {
     setError(false);
@@ -87,6 +101,8 @@ const SignIn = () => {
 
   });
 
+
+
   const signInHandler = async (e) => {
     e.preventDefault();
 
@@ -96,15 +112,15 @@ const SignIn = () => {
     let signInResult = '';
     try {
       signInResult = await signIn(signInData);
+      if (signInResult.code == 200) {
+        localStorage.setItem('myToken', signInResult.token);
+        Router.push('/album');
+      } else {
+        console.log(signInResult.message);
+        setError(true);
+      }
     } catch (e) {
       console.log('signin error', e);
-    }
-
-    if (signInResult.code == 200) {
-      Router.push('/album');
-    } else {
-      console.log(signInResult.message);
-      setError(true);
     }
   };
 
