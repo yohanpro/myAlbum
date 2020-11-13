@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -40,45 +42,50 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(6),
     },
+    btnDelete: {
+        backgroundColor: '#f48fb1',
+        color: 'black',
+    }
 }));
 
 const AlbumPage = props => {
     const { albums } = props;
 
-    const [posts, setPosts] = useState(albums);
+
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(5);
+    const [albumsPerPage] = useState(5);
 
 
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const indexOfLastAlbum = currentPage * albumsPerPage;
+    const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
+    const currentAlbums = albums.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const classes = useStyles();
+
     return (
-        <div className="container">
+        <div className="container container-album">
+            <CssBaseline />
             <AppBar position="relative">
                 <Toolbar>
-                    <CameraIcon className={classes.icon} />
-                    <Typography variant="h6" color="inherit" noWrap>
+                    <CameraIcon className={classes.icon} fontSize="large" />
+                    <Typography variant="h3" color="inherit" noWrap >
                         Album Page
                     </Typography>
                 </Toolbar>
             </AppBar>
             <Container className={classes.cardGrid} maxWidth="md">
                 <Albums
-                    albums={currentPosts}
+                    albums={currentAlbums}
                     classes={classes}
-                    loading={loading}
                 />
             </Container>
             <AlbumPagination
-                postsPerPage={postsPerPage}
-                totalPosts={posts.length}
+                albumsPerPage={albumsPerPage}
+                totalAlbums={albums.length}
                 paginate={paginate}
             />
         </div>
@@ -91,12 +98,10 @@ export async function getStaticProps(context) {
     let albums = [];
     try {
         albums = await getAlbumData();
-
     } catch (e) {
         console.log(e);
     }
-
     return {
-        props: { albums }, // will be passed to the page component as props
+        props: { albums },
     };
 }
