@@ -66,6 +66,7 @@ const SignIn = () => {
   //autologin process
   useEffect(() => {
     const myToken = localStorage.getItem('myToken') || '';
+
     if (!myToken) return;
 
     autologin('123')
@@ -74,8 +75,6 @@ const SignIn = () => {
           Router.push('/album');
         }
       });
-
-
   }, []);
 
   const inputHandler = (e) => {
