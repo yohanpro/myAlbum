@@ -119,6 +119,7 @@ const AlbumPage = props => {
                 totalAlbums={albums.length}
                 paginate={paginate}
             />
+
         </div>
     );
 };

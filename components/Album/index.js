@@ -1,7 +1,12 @@
 
+import { useState, useEffect } from 'react';
+
+import { deleteAlbum } from 'actions/album';
+import { shortenText } from 'helpers/utils';
+import DeleteModal from 'components/Modal/deleteModal';
+import Router from 'next/router';
 
 import Button from '@material-ui/core/Button';
-
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,17 +15,37 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { shortenText } from 'helpers/utils';
 
 
 const Albums = props => {
-    const { albums, classes, loading } = props;
+    const { albums, classes } = props;
+
+    const [openEditModal, setDeleteModal] = useState(false);
+    const [targetAlbum, setTargetAlbum] = useState();
+
+    const handleOpenDelete = (card) => {
+        setTargetAlbum(card);
+        setDeleteModal(true);
+    };
+    const handleCloseDelete = () => {
+        deleteAlbum(targetAlbum.id)
+            .then(setDeleteModal(false))
+            .catch(error => console.log(error));
+    };
+
+    const handleCancel = () => setDeleteModal(false);
 
     return (
         <>
+            <DeleteModal
+                open={openEditModal}
+                targetAlbum={targetAlbum}
+                handleClose={handleCloseDelete}
+                handleCancel={handleCancel}
+            />
             <Grid container spacing={4}>
                 {albums.map((card) => (
-                    <Grid item key={card.id} xs={12} sm={6} md={4}>
+                    <Grid key={card.id} item xs={12} sm={6} md={4} >
                         <Card className={classes.card}>
                             <CardMedia
                                 className={classes.cardMedia}
@@ -39,12 +64,13 @@ const Albums = props => {
                                     size="small"
                                     color="primary"
                                     startIcon={<EditIcon />}
+                                    onClick={() => Router.push(`/album/${card.id}`)}
                                 >
                                     <Typography
                                         variant="h5"
                                         color="inherit">
                                         수정
-                                    </Typography>
+                                        </Typography>
                                 </Button>
                                 <Button
                                     variant="contained"
@@ -52,6 +78,7 @@ const Albums = props => {
                                     color="secondary"
                                     className={classes.btnDelete}
                                     startIcon={<DeleteIcon />}
+                                    onClick={() => handleOpenDelete(card)}
                                 >
                                     <Typography
                                         variant="h5"
