@@ -13,7 +13,6 @@ export const signIn = async (signInData) => {
         message: '',
     };
 
-
     /* 
      실제 서비스에서 아래 작업은 Backend에서 암호화된 password를 확인해야 한다.
      지금 과제는 Front 과제이기 때문에 구현하지는 않음.

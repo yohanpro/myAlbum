@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { getAlbumData, saveAlbum } from 'actions/album';
+import { saveAlbum } from 'actions/album';
 import { makeStyles } from '@material-ui/core/styles';
 import AlbumLayout from 'components/Layout/albumLayout';
 import Container from '@material-ui/core/Container';
@@ -45,26 +46,24 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
+const NewAlbum = (props) => {
 
-const AlbumEdit = props => {
-    const { albumData } = props;
-    const [title, setTitle] = useState(albumData.title);
+    const [title, setTitle] = useState();
     const [isBtnActive, setBtnState] = useState(false);
     const classes = useStyles();
-
 
     const saveHandler = () => {
         const albumData = {
             title
         };
-        saveAlbum(albumData, albumData.id)
+        saveAlbum(albumData)
             .then(() => Router.push('/album'));
     };
+
 
     const inputHandler = (e) => {
         setTitle(e.target.value);
     };
-
 
     useEffect(() => {
         if (_.isEmpty(title)) {
@@ -74,10 +73,9 @@ const AlbumEdit = props => {
         }
     });
 
-
     return (
         <AlbumLayout
-            title="Edit Album"
+            title="New Album"
             className="container container-album__editor"
         >
             <Container>
@@ -89,7 +87,6 @@ const AlbumEdit = props => {
                             name="albumTitle"
                             label="Album Title"
                             className={classes.albumTitle}
-                            defaultValue={albumData.title}
                             onChange={inputHandler}
                             fullWidth
 
@@ -105,7 +102,7 @@ const AlbumEdit = props => {
                             onClick={saveHandler}
                         >
                             확인
-                        </Button>
+                    </Button>
                         <Button
                             type="submit"
                             fullWidth
@@ -115,7 +112,7 @@ const AlbumEdit = props => {
                             onClick={() => Router.push('/album')}
                         >
                             취소
-                        </Button>
+                    </Button>
                     </div>
                 </Grid>
             </Container>
@@ -123,20 +120,4 @@ const AlbumEdit = props => {
     );
 };
 
-export default AlbumEdit;
-
-
-export async function getServerSideProps(context) {
-
-    const { id } = context.query;
-    let albumData = [];
-    try {
-        albumData = await getAlbumData(id);
-    } catch (error) {
-        console.log('error', error);
-    }
-    return {
-        props: { albumData },
-    };
-
-}
+export default NewAlbum;

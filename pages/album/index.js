@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getAlbumData } from 'actions/album';
-import { signOut } from 'actions';
-import Router from 'next/router';
-
 import AlbumPagination from 'components/Pagination';
 import Albums from 'components/Album';
-
-
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import AlbumLayout from 'components/Layout/albumLayout';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Button from '@material-ui/core/Button';
+import Router from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     appbar: {
@@ -41,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(4),
     },
     cardGrid: {
-        paddingTop: theme.spacing(8),
+        paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(8),
     },
     card: {
@@ -62,14 +54,20 @@ const useStyles = makeStyles((theme) => ({
     btnDelete: {
         backgroundColor: 'red',
         color: '#fff',
+    },
+    newAlbum: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: '3rem',
+        cursor: 'pointer'
+    },
+    btnAddAlbum: {
+        marginRight: '1rem'
     }
 }));
 
 const AlbumPage = props => {
     const { albums } = props;
-
-
-    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [albumsPerPage] = useState(5);
 
@@ -83,31 +81,18 @@ const AlbumPage = props => {
 
     const classes = useStyles();
 
-    const logoutHandler = () => {
-        signOut().then(() => {
-            localStorage.removeItem('myToken');
-            Router.push('/');
-        });
-    };
+
+
     return (
-        <div className="container container-album">
-            <CssBaseline />
-            <AppBar position="relative" >
-                <Toolbar className={classes.appbar}>
-                    <CameraIcon className={classes.icon} fontSize="large" />
-                    <Typography variant="h3" color="inherit" noWrap >
-                        Album Page
+        <AlbumLayout title="Album Page" className="container container-album">
+            <Container maxWidth="md">
+                <div className={classes.newAlbum} onClick={() => Router.push('/album/new')}>
+                    <AddCircleIcon fontSize="large" className={classes.btnAddAlbum} />
+                    <Typography variant="h3" component="h2">
+                        앨범 추가하기
                     </Typography>
-
-
-                    <Button className={classes.logout} onClick={logoutHandler}>
-                        <ExitToAppIcon className={classes.iconLogout} fontSize="large" />
-                        <Typography variant="h4" color="inherit" noWrap >
-                            로그아웃
-                        </Typography>
-                    </Button>
-                </Toolbar>
-            </AppBar>
+                </div>
+            </Container>
             <Container className={classes.cardGrid} maxWidth="md">
                 <Albums
                     albums={currentAlbums}
@@ -119,8 +104,7 @@ const AlbumPage = props => {
                 totalAlbums={albums.length}
                 paginate={paginate}
             />
-
-        </div>
+        </AlbumLayout>
     );
 };
 
