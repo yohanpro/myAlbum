@@ -16,8 +16,7 @@ export default function MyApp(props) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
 
-    const token = localStorage.getItem('alBumToken') || [];
-    console.log('token', token);
+
   }, []);
 
   return (

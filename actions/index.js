@@ -65,6 +65,11 @@ export const autologin = async (token) => {
     return result;
 };
 
-
+export const signOut = async () => {
+    return {
+        code: 200,
+        message: 'success'
+    };
+};
 
 

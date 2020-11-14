@@ -1,20 +1,37 @@
-import { getAlbumData } from 'actions/album';
-import AlbumPagination from 'components/Pagination';
 import { useState, useEffect } from 'react';
+import { getAlbumData } from 'actions/album';
+import { signOut } from 'actions';
+import Router from 'next/router';
+
+import AlbumPagination from 'components/Pagination';
 import Albums from 'components/Album';
+
+
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
+    appbar: {
+        display: 'flex'
+    },
     icon: {
         marginRight: theme.spacing(2),
+    },
+    logout: {
+        marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+    },
+    iconLogout: {
+        marginRight: '1rem'
     },
     heroContent: {
         backgroundColor: theme.palette.background.paper,
@@ -43,8 +60,8 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(6),
     },
     btnDelete: {
-        backgroundColor: '#f48fb1',
-        color: 'black',
+        backgroundColor: 'red',
+        color: '#fff',
     }
 }));
 
@@ -66,15 +83,29 @@ const AlbumPage = props => {
 
     const classes = useStyles();
 
+    const logoutHandler = () => {
+        signOut().then(() => {
+            localStorage.removeItem('myToken');
+            Router.push('/');
+        });
+    };
     return (
         <div className="container container-album">
             <CssBaseline />
-            <AppBar position="relative">
-                <Toolbar>
+            <AppBar position="relative" >
+                <Toolbar className={classes.appbar}>
                     <CameraIcon className={classes.icon} fontSize="large" />
                     <Typography variant="h3" color="inherit" noWrap >
                         Album Page
                     </Typography>
+
+
+                    <Button className={classes.logout} onClick={logoutHandler}>
+                        <ExitToAppIcon className={classes.iconLogout} fontSize="large" />
+                        <Typography variant="h4" color="inherit" noWrap >
+                            로그아웃
+                        </Typography>
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Container className={classes.cardGrid} maxWidth="md">
