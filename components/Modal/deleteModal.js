@@ -1,10 +1,7 @@
-
-import { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import { makeStyles } from '@material-ui/core/styles';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -13,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
 
     title: {
         color: 'red',
+        padding: 0,
         '&>h2': {
             fontSize: '2.5rem',
             textAlign: 'center',
@@ -26,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
         "&>.bold": {
             fontWeight: 'bold'
         },
-
     },
     button: {
         fontSize: '2rem'
@@ -36,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 const DeleteModal = props => {
     const { open, targetAlbum, handleClose, handleCancel } = props;
     const classes = useStyles();
-
 
     return (
         <div>
@@ -50,7 +46,6 @@ const DeleteModal = props => {
                 <DialogTitle
                     id="alert-dialog-slide-title"
                     className={classes.title}
-
                 >
                     정말로 삭제하시겠습니까?
                 </DialogTitle>

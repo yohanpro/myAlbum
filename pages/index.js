@@ -1,4 +1,10 @@
 import { useState, useEffect } from 'react';
+import classnames from 'classnames';
+import _ from 'lodash';
+import Router from 'next/router';
+import { validateEmail } from 'helpers/utils';
+import { signIn, autologin } from 'actions';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,11 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import classnames from 'classnames';
-import _ from 'lodash';
-import Router from 'next/router';
-import { validateEmail } from 'helpers/utils';
-import { signIn, autologin } from 'actions';
+
 
 
 
@@ -69,7 +71,7 @@ const SignIn = () => {
 
     if (!myToken) return;
 
-    autologin('123')
+    autologin(myToken)
       .then(result => {
         if (result.code === 200) {
           Router.push('/album');
@@ -109,13 +111,14 @@ const SignIn = () => {
       email, password
     };
     let signInResult = '';
+
     try {
       signInResult = await signIn(signInData);
+
       if (signInResult.code == 200) {
         localStorage.setItem('myToken', signInResult.token);
         Router.push('/album');
       } else {
-        console.log(signInResult.message);
         setError(true);
       }
     } catch (e) {

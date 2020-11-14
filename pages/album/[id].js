@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { getAlbumData, saveAlbum } from 'actions/album';
-import { makeStyles } from '@material-ui/core/styles';
 import AlbumLayout from 'components/Layout/albumLayout';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+
 import classnames from 'classnames';
 import Router from 'next/router';
 import _ from 'lodash';
+
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles((theme) => ({
     albumTitle: {

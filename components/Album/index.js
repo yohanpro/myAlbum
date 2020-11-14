@@ -1,6 +1,5 @@
 
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
 import { deleteAlbum } from 'actions/album';
 import { shortenText } from 'helpers/utils';
 import DeleteModal from 'components/Modal/deleteModal';

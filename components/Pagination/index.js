@@ -14,7 +14,10 @@ const useStyles = makeStyles((theme) => ({
     pagination: {
         justifyContent: 'center',
         display: 'flex',
-        marginBottom: '1rem'
+        marginBottom: '1rem',
+        '& button': {
+            fontSize: '2rem'
+        }
     }
 
 }));

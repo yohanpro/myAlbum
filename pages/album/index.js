@@ -3,11 +3,13 @@ import { getAlbumData } from 'actions/album';
 import AlbumPagination from 'components/Pagination';
 import Albums from 'components/Album';
 import AlbumLayout from 'components/Layout/albumLayout';
+import Router from 'next/router';
+
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Router from 'next/router';
+
 
 const useStyles = makeStyles((theme) => ({
     appbar: {
@@ -59,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: '3rem',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        width: 'fit-content'
     },
     btnAddAlbum: {
         marginRight: '1rem'
@@ -88,7 +91,7 @@ const AlbumPage = props => {
             <Container maxWidth="md">
                 <div className={classes.newAlbum} onClick={() => Router.push('/album/new')}>
                     <AddCircleIcon fontSize="large" className={classes.btnAddAlbum} />
-                    <Typography variant="h3" component="h2">
+                    <Typography variant="h4" component="h4">
                         앨범 추가하기
                     </Typography>
                 </div>
@@ -115,7 +118,7 @@ export async function getStaticProps(context) {
     try {
         albums = await getAlbumData();
     } catch (e) {
-        console.log(e);
+
     }
     return {
         props: { albums },

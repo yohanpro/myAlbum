@@ -1,7 +1,7 @@
 const dummyAccounts = [
     {
-        "email": "Caterina_Effertz@example.net",
-        "password": "ABCDCDC"
+        "email": "travelFlan@travelFlan.com",
+        "password": "1234"
     },
     {
         "email": "abcd@example.net",

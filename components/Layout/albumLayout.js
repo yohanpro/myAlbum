@@ -1,14 +1,14 @@
 
+import { signOut } from 'actions';
+import Router from 'next/router';
+
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
-import { signOut } from 'actions';
-import Router from 'next/router';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 
 const useStyles = makeStyles((theme) => ({
